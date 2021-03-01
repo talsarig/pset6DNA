@@ -1,0 +1,102 @@
+
+import csv
+import sys
+import collections
+
+def main():
+    
+#check argv  
+# argv[1] is the csv database of all people and max repetition of str (X) for this person
+# arrg[2] is the dna seq for a person
+    while len(sys.argv)!=3:
+        print ("This program needs to get 3 arguments to funtion")
+        return 1
+        
+    argv = sys.argv
+    seqfile = open(argv[2])
+    seq=seqfile.read()
+
+    database = []
+    # open csv into a list of the dict
+    with open(argv[1]) as csvfile:
+        reader = csv.reader(csvfile,delimiter=" ")
+          
+        for row in reader:
+            database.append((row))
+                    
+    #strs=database[0][0].split(',')
+    n=len(database)
+    N = len(database[0])
+    for i in range(n):
+        for j in range(N):
+            database[i][j]=database[i][j].split(',')
+            if i>0 and j>0:
+                  database[i][j]=int(database[i][j])
+       # the problem is the the list is a list of string, i need to get read of the extra ' in the start and end of the list
+    strs = database[0]
+    print (strs)
+    person = { "seqfile":argv[2], "AGATC":0 , "AATG":0 ,"TATC":0  }
+    count_str(seq,person,strs)
+    
+    print ("person before")
+    print (person)
+   
+    print ("person post count")
+    print (person)
+    
+   
+    
+def count_str(seq,person,strs):
+    #find the longest streak of each str in a person and add it to the person dict
+    N = len(strs)
+    n =len(seq)
+    count=0
+    previous=False
+        
+    for i in range(1,N): # check all strs
+        kmer=strs[i]
+        print ("kmer is "+kmer)
+        print (strs[i])
+        k= len(kmer)
+        print ("k is "+k)
+        print ("hi tal this loop works")
+            
+        for j in range(n-k): 
+            if seq[j:j+k] == kmer and count == 0: #find the first kmer
+                count=count+1
+                previous= True
+            if seq[j:j+k] == kmer and previous == True :#checkif the previous kmer is the str
+                count=count+1
+                previous= True
+            if count > person.get(kmer): #if this is the longest streak in for the kmer
+                person.update({kmer:count})# add to persondict
+            print ("counts for "+ kmer+ "is" + count)
+         
+         
+                
+def findmatch() : 
+        pass
+                
+"""while True:
+               try:
+                    row=next(obj)
+                    print (row)
+                   
+                except StopIteration:
+                    break
+                
+            print (seq)
+            
+            #for i in range(len(seq)):
+               # if seq[]
+            
+    #open file
+    #find how many STR repeats are there
+    #find the longest
+    #look for the same number in the csv (each row)
+    #if found retrun name and break
+    #esle return no match
+    """
+    
+main()
+        
